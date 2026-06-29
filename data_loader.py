@@ -1,5 +1,5 @@
-from inngest.experimental.mocked.trigger_test import client
-from nltk.book import texts
+# from inngest.experimental.mocked.trigger_test import client
+# from nltk.book import texts
 from openai import OpenAI
 from llama_index.readers.file import PDFReader
 from llama_index.core.node_parser import SentenceSplitter
@@ -26,4 +26,4 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         model=EMBED_MODEL,
         input=texts,
     )
-    return [item.embeddings for item in response.data]
+    return [item.embedding for item in response.data]

@@ -1,0 +1,9 @@
+fastapi
+inngest
+python-dotenv
+openai
+llama-index-readers-file
+llama-index-core
+pypdf
+qdrant-client
+uvicorn

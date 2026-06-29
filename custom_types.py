@@ -6,7 +6,7 @@ class RAGChunkAndSrc(pydantic.BaseModel):
 
 
 class RAGUpsertResult(pydantic.BaseModel):
-    inngest: str
+    ingested: int
 
 
 class RAGSearchResult(pydantic.BaseModel):
