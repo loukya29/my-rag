@@ -17,25 +17,47 @@ class QdrantStorage:
         self.client.upsert(self.collection, points)
 
     #handles the searching of vectors
+    # def search(self, query_vector, top_k: int = 5):
+    #     results = self.client.search(
+    #         collection_name=self.collection,
+    #         query_vector=query_vector,
+    #         with_payload=True,
+    #         limit=top_k
+    #     )
+    #     contexts = []
+    #     sources = set()
+    #
+    #     for r in results:
+    #         paylaod = getattr(r, 'payload', None) or {}
+    #         text = paylaod.get('text',"")
+    #         source = paylaod.get('source',"")
+    #
+    #         if text:
+    #             contexts.append(text)
+    #             sources.add(source)
+    # #top_k = 5 means that it will search for the top 5 results from the DB
+    #
+    #     return {"contexts": contexts, "sources": sources}
+
+    # the search method was removed in the newer version of qdrant-client
     def search(self, query_vector, top_k: int = 5):
-        results = self.client.search(
+        results = self.client.query_points(
             collection_name=self.collection,
-            query_vector=query_vector,
+            query=query_vector,
             with_payload=True,
             limit=top_k
-        )
+        ).points
+
         contexts = []
-        sources = set()
-
+        sources = []
         for r in results:
-            paylaod = getattr(r, 'payload', None) or {}
-            text = paylaod.get('text',"")
-            source = paylaod.get('source',"")
-
+            payload = getattr(r, 'payload', None) or {}
+            text = payload.get('text', "")
+            source = payload.get('source', "")
             if text:
                 contexts.append(text)
-                sources.add(source)
-    #top_k = 5 means that it will search for the top 5 results from the DB
+                if source and source not in sources:
+                    sources.append(source)
 
         return {"contexts": contexts, "sources": sources}
 
